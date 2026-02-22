@@ -1,16 +1,28 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 import pickle
+import os
+
 
 app = Flask(__name__)
 
-model = pickle.load(open("air_quality_model.pkl", "rb"))
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+model_path = os.path.join(BASE_DIR, "air_quality_model.pkl")
+
+model = pickle.load(open(model_path, "rb"))
+
+
 
 @app.route("/")
-def home(): 
+def home():
     return render_template("index.html")
 
+
+
 @app.route("/predict", methods=["POST"])
-def predict(): 
+def predict():
+
     CO = float(request.form["CO"])
     NO2 = float(request.form["NO2"])
     SO2 = float(request.form["SO2"])
@@ -30,5 +42,5 @@ def predict():
     )
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     app.run(debug=True)
