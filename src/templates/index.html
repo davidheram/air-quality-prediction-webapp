@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Air Quality Prediction</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<h2>Air Quality Prediction</h2>
+
+<form action="/predict_form" method="post">
+
+    CO: <input type="number" step="any" name="CO"><br><br>
+
+    NO2: <input type="number" step="any" name="NO2"><br><br>
+
+    SO2: <input type="number" step="any" name="SO2"><br><br>
+
+    O3: <input type="number" step="any" name="O3"><br><br>
+
+    PM2.5: <input type="number" step="any" name="PM2_5"><br><br>
+
+    PM10: <input type="number" step="any" name="PM10"><br><br>
+
+    <input type="submit" value="Predict">
+
+</form>
+
+{% if prediction %}
+    <h3>Prediction: {{ prediction }}</h3>
+{% endif %}
+
+</body>
+</html>
