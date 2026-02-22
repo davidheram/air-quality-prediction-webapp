@@ -5,13 +5,20 @@ import os
 
 app = Flask(__name__)
 
+model = None
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-model_path = os.path.join(BASE_DIR, "air_quality_model.pkl")
 
-model = pickle.load(open(model_path, "rb"))
+def load_model():
+    global model
 
+    if model is None:
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        model_path = os.path.join(BASE_DIR, "air_quality_model.pkl")
+
+        model = pickle.load(open(model_path, "rb"))
+
+    return model
 
 
 @app.route("/")
@@ -23,7 +30,7 @@ def home():
 @app.route("/predict", methods=["POST"])
 def predict():
 
-    CO = float(request.form["CO"])
+    # Obtener datos del formulario   CO = float(request.form["CO"])
     NO2 = float(request.form["NO2"])
     SO2 = float(request.form["SO2"])
     O3 = float(request.form["O3"])
@@ -31,6 +38,8 @@ def predict():
     PM10 = float(request.form["PM10"])
 
     features = [[CO, NO2, SO2, O3, PM2_5, PM10]]
+
+    model = load_model()
 
     prediction = model.predict(features)[0]
 
@@ -40,5 +49,3 @@ def predict():
         "index.html",
         prediction=result
     )
-
-
